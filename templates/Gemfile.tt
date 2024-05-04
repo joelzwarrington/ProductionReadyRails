@@ -18,6 +18,10 @@ gem "devise_invitable"
 ## Authorization
 gem "action_policy"
 
+## Code Style + Git hooks
+gem "standardrb"
+gem "overcommit"
+
 ## Assets
 gem "sprockets-rails"
 gem "importmap-rails"

@@ -2,16 +2,18 @@ require "fileutils"
 
 def apply_template!
   setup
-  raise "ERROR: This template requires Rails '~> 7.1.1', you're using #{MinimumRailsVersion.current_version}" unless MinimumRailsVersion.satisfied?
-  raise "Using invalid application options" unless RequiredOptions.valid?(options)
+  template "templates/README.md.tt", force: true
+  template "templates/ruby-version.tt", ".ruby-version", force: true
+  template "templates/Gemfile.tt", "Gemfile", force: true
+  copy_file "templates/Procfile.dev", "Procfile.dev"
 
-  template "templates/Gemfile.tt", force: true
+  after_bundle do
+    run "bin/standardrb > /dev/null"
+  end
 end
 
 def setup
   add_template_repository_to_source_path
-  require_relative "lib/minimum_rails_version"
-  require_relative "lib/required_options"
 end
 
 def add_template_repository_to_source_path

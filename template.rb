@@ -1,5 +1,4 @@
 require "fileutils"
-require "shellwords"
 
 def apply_template!
   add_template_repository_to_source_path

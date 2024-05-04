@@ -1,10 +1,17 @@
 require "fileutils"
 
 def apply_template!
-  add_template_repository_to_source_path
-  require_relative_paths
+  setup
+  raise "ERROR: This template requires Rails '~> 7.1.1', you're using #{MinimumRailsVersion.current_version}" unless MinimumRailsVersion.satisfied?
+  raise "Using invalid application options" unless RequiredOptions.valid?(options)
 
-  puts "MinimumRailsVersion.satisfied?: #{MinimumRailsVersion.satisfied?}"
+  template "templates/Gemfile.tt", force: true
+end
+
+def setup
+  add_template_repository_to_source_path
+  require_relative "lib/minimum_rails_version"
+  require_relative "lib/required_options"
 end
 
 def add_template_repository_to_source_path
@@ -19,11 +26,6 @@ def add_template_repository_to_source_path
   else
     source_paths.unshift(File.dirname(__FILE__))
   end
-end
-
-def require_relative_paths
-  require_relative "lib/minimum_rails_version"
-  require_relative "lib/required_options"
 end
 
 apply_template!
